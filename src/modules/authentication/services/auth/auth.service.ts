@@ -5,12 +5,14 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { RegisterUserDto } from '../../dto/register-user.dto';
-import { use } from 'react';
-import { NotFoundError } from 'rxjs';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly _userService: UserService) {}
+  constructor(
+    private readonly _userService: UserService,
+    private readonly _jwtService: JwtService,
+  ) {}
 
   async signIn(registerDto: RegisterUserDto) {
     const user = await this._userService.findUser(registerDto.username);
@@ -20,8 +22,8 @@ export class AuthService {
     if (user.passwordHash !== registerDto.password)
       throw new BadRequestException('Invalid credentials');
 
-    const { passwordHash, ...result } = user;
+    const payload = { username: user.username, sub: user.id };
 
-    return result;
+    return { access_token: await this._jwtService.signAsync(payload) };
   }
 }
