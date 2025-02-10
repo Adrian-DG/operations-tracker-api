@@ -6,6 +6,10 @@ import {
 import { UserService } from '../user/user.service';
 import { RegisterUserDto } from '../../dto/register-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import * as security from '../../helpers/security.helper';
+import { User } from '../../entities/user.entity';
+import { compare } from 'bcrypt';
+import { access } from 'fs';
 
 @Injectable()
 export class AuthService {
@@ -14,16 +18,40 @@ export class AuthService {
     private readonly _jwtService: JwtService,
   ) {}
 
-  async signIn(registerDto: RegisterUserDto) {
-    const user = await this._userService.findUser(registerDto.username);
-    if (!user) throw new NotFoundException('User does not exist');
+  async signUp(registerDto: RegisterUserDto) {
+    const usernameHash = await security.hash(registerDto.username);
 
-    // TODO: Implement password hash validation
-    if (user.passwordHash !== registerDto.password)
-      throw new BadRequestException('Invalid credentials');
+    if (await this._userService.findUser(usernameHash))
+      throw new BadRequestException('User already exists');
 
-    const payload = { username: user.username, sub: user.id };
+    const [encryptedusername, encryptedPassword] = await Promise.all([
+      security.encrypt(registerDto.username),
+      security.encrypt(registerDto.password),
+    ]);
 
-    return { access_token: await this._jwtService.signAsync(payload) };
+    const user = await this._userService.createUser({
+      username: encryptedusername,
+      passwordHash: encryptedPassword,
+    } as User);
+
+    return { ...registerDto, password: '' };
+  }
+
+  async signIn(username: string, password: string) {
+    const usernameHash = await security.hash(username);
+    const user = await this._userService.findUser(usernameHash);
+
+    if (!user) throw new NotFoundException('User not found');
+
+    if (!(await compare(password, user.passwordHash)))
+      throw new BadRequestException('Invalid password');
+
+    const decryptedUsername = await security.decrypt(user.username);
+    const payload = { username: decryptedUsername, sub: user.id };
+    const token = this._jwtService.signAsync(payload, {
+      secret: process.env.JWT_SECRET,
+    });
+
+    return { access_token: token };
   }
 }
