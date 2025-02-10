@@ -64,6 +64,7 @@ const _decrypt = async (encryptedData: string): Promise<string> => {
 };
 
 export const hash = async (data: string) => {
+  console.log('hashing data', data);
   return await hashSync(data, process.env.HASH_SALT as string);
 };
 

@@ -19,6 +19,7 @@ export class AuthService {
   ) {}
 
   async signUp(registerDto: RegisterUserDto) {
+    console.log(registerDto);
     const usernameHash = await security.hash(registerDto.username);
 
     if (await this._userService.findUser(usernameHash))

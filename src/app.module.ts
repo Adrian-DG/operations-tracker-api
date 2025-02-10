@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { ENVIRONMENT_CONFIG } from './helpers/environment.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -13,7 +11,5 @@ import { AuthenticationModule } from './modules/authentication/authentication.mo
     TypeOrmModule.forRoot(DATABASE_CONFIG),
     AuthenticationModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
