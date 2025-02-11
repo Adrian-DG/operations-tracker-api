@@ -6,19 +6,19 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { JWT_CONSTANTS } from './constants/jwt-constants.constant';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { UserRoleService } from './services/user-role/user-role.service';
-import { UserRole } from './entities/user-role.entity';
+import { UserPermission } from './entities/user-permission.entity';
+import { UserPermissionService } from './services/user-permission/user-permission.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, UserRole]),
+    TypeOrmModule.forFeature([User, UserPermission]),
     JwtModule.register({
       global: true,
       secret: JWT_CONSTANTS.secret,
       signOptions: { expiresIn: '1d' },
     }),
   ],
-  providers: [UserService, AuthService, UserRoleService],
+  providers: [UserService, AuthService, UserPermissionService],
   controllers: [AuthenticationController],
   exports: [AuthService],
 })

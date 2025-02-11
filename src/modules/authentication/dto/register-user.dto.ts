@@ -7,7 +7,7 @@ import {
   IsNotEmpty,
   IsString,
 } from 'class-validator';
-import { Roles } from '../enums/roles.enum';
+import { Permissions } from '../enums/Permissions.enum';
 
 export class RegisterUserDto {
   @IsString()
@@ -20,9 +20,12 @@ export class RegisterUserDto {
   @ApiProperty()
   readonly password: string;
 
-  @IsArray()
+  @IsArray({ message: 'Permissions must be an array', each: false })
   @ArrayNotEmpty()
-  @IsEnum(Roles, { each: true })
-  @ApiProperty({ enum: Roles, isArray: true, example: Object.values(Roles) })
-  readonly roles: Roles[];
+  @ApiProperty({
+    type: String,
+    isArray: true,
+    example: Object.values(Permissions),
+  })
+  readonly permissions: Permissions[];
 }

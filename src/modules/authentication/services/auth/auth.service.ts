@@ -9,7 +9,8 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '../../entities/user.entity';
 import { compare } from 'bcrypt';
 import * as bcrypt from 'bcrypt';
-import { UserRoleService } from '../user-role/user-role.service';
+import { UserPermission } from '../../entities/user-permission.entity';
+import { UserPermissionService } from '../user-permission/user-permission.service';
 
 // https://medium.com/@awaisshaikh94/encrypting-passwords-in-nestjs-with-the-robust-hashing-mechanism-of-bcrypt-e052c7a499a3
 
@@ -20,11 +21,11 @@ export class AuthService {
   constructor(
     private readonly _userService: UserService,
     private readonly _jwtService: JwtService,
-    private readonly _userRoleService: UserRoleService,
+    private readonly _userPermissionService: UserPermissionService,
   ) {}
 
   async signUp(payload: RegisterUserDto) {
-    const { username, password } = payload;
+    const { username, password, permissions } = payload;
 
     const user = await this._userService.findUser(username);
 
@@ -37,7 +38,10 @@ export class AuthService {
       passwordHash: hashedPassword,
     } as User);
 
-    await this._userRoleService.assignRolesToUser(savedUser, payload.roles);
+    await this._userPermissionService.assignPermissionsToUser(
+      savedUser,
+      permissions,
+    );
 
     return { username: savedUser.username, id: savedUser.id };
   }
