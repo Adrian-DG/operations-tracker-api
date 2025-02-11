@@ -13,10 +13,10 @@ export class AuthenticationController {
   @Post('sign-in')
   @ApiOperation({ summary: 'Sign in user' })
   @ApiResponse({ status: 200, description: 'User signed in' })
-  async signIn(@Body() loginDto: LoginUserDto) {
+  async signIn(@Body() payload: LoginUserDto) {
     const result = await this._authService.signIn(
-      loginDto.username,
-      loginDto.password,
+      payload.username,
+      payload.password,
     );
     return result;
   }
@@ -24,8 +24,8 @@ export class AuthenticationController {
   @Post('sign-up')
   @ApiOperation({ summary: 'Sign up user' })
   @ApiResponse({ status: 201, description: 'User signed up' })
-  async signUp(@Body() registerDto: RegisterUserDto) {
-    const result = await this._authService.signUp(registerDto);
+  async signUp(@Body() payload: RegisterUserDto) {
+    const result = await this._authService.signUp(payload);
     return result;
   }
 

@@ -15,7 +15,7 @@ export class UserService {
 
   findUser(username: string) {
     return this._repository.findOne({
-      where: { username: Like(`${username}|%`) },
+      where: { username: Like(`${username}%`) },
     });
   }
 

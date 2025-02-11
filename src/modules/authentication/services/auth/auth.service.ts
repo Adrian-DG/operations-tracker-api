@@ -6,51 +6,49 @@ import {
 import { UserService } from '../user/user.service';
 import { RegisterUserDto } from '../../dto/register-user.dto';
 import { JwtService } from '@nestjs/jwt';
-import * as security from '../../helpers/security.helper';
 import { User } from '../../entities/user.entity';
 import { compare } from 'bcrypt';
-import { access } from 'fs';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
+  private readonly SALT_ROUNDS = 10;
+
   constructor(
     private readonly _userService: UserService,
     private readonly _jwtService: JwtService,
   ) {}
 
-  async signUp(registerDto: RegisterUserDto) {
-    console.log(registerDto);
-    const usernameHash = await security.hash(registerDto.username);
+  async signUp(payload: RegisterUserDto) {
+    const { username, password } = payload;
 
-    if (await this._userService.findUser(usernameHash))
-      throw new BadRequestException('User already exists');
+    const user = await this._userService.findUser(username);
 
-    const [encryptedusername, encryptedPassword] = await Promise.all([
-      security.encrypt(registerDto.username),
-      security.encrypt(registerDto.password),
-    ]);
+    if (user) throw new BadRequestException('User already exists');
 
-    const user = await this._userService.createUser({
-      username: encryptedusername,
-      passwordHash: encryptedPassword,
+    const hashedPassword = await bcrypt.hash(password, this.SALT_ROUNDS);
+
+    const newUser = await this._userService.createUser({
+      username,
+      passwordHash: hashedPassword,
     } as User);
 
-    return { ...registerDto, password: '' };
+    return { username: newUser.username, id: newUser.id };
   }
 
   async signIn(username: string, password: string) {
-    const usernameHash = await security.hash(username);
-    const user = await this._userService.findUser(usernameHash);
+    const user = await this._userService.findUser(username);
 
     if (!user) throw new NotFoundException('User not found');
 
-    if (!(await compare(password, user.passwordHash)))
-      throw new BadRequestException('Invalid password');
+    const isPasswordCorrect = await compare(password, user.passwordHash);
 
-    const decryptedUsername = await security.decrypt(user.username);
-    const payload = { username: decryptedUsername, sub: user.id };
-    const token = this._jwtService.signAsync(payload, {
-      secret: process.env.JWT_SECRET,
+    if (!isPasswordCorrect)
+      throw new BadRequestException('Invalid credentials');
+
+    const token = await this._jwtService.signAsync({
+      id: user.id,
+      username: user.username,
     });
 
     return { access_token: token };
