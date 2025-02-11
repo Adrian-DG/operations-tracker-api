@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from '../../services/auth/auth.service';
 import { RegisterUserDto } from '../../dto/register-user.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../../guards/auth.guard';
 import { LoginUserDto } from '../../dto/login-user.dto';
 
@@ -12,6 +12,7 @@ export class AuthenticationController {
 
   @Post('sign-in')
   @ApiOperation({ summary: 'Sign in user' })
+  @ApiBody({ type: LoginUserDto })
   @ApiResponse({ status: 200, description: 'User signed in' })
   async signIn(@Body() payload: LoginUserDto) {
     const result = await this._authService.signIn(
@@ -23,6 +24,7 @@ export class AuthenticationController {
 
   @Post('sign-up')
   @ApiOperation({ summary: 'Sign up user' })
+  @ApiBody({ type: RegisterUserDto })
   @ApiResponse({ status: 201, description: 'User signed up' })
   async signUp(@Body() payload: RegisterUserDto) {
     const result = await this._authService.signUp(payload);
