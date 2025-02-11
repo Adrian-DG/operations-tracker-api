@@ -4,6 +4,9 @@ import { RegisterUserDto } from '../../dto/register-user.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../../guards/auth.guard';
 import { LoginUserDto } from '../../dto/login-user.dto';
+import { HasPermissions } from '../../decorators/permissions.decorator';
+import { Permissions } from '../../enums/Permissions.enum';
+import { PermissionsGuard } from '../../guards/Permissions.guard';
 
 @ApiTags('authentication')
 @Controller('authentication')
@@ -32,7 +35,8 @@ export class AuthenticationController {
   }
 
   @Get('is-authenticated')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @HasPermissions(Permissions.CREATE_EVENTS)
   @ApiOperation({ summary: 'Check if user is authenticated' })
   checkAuthentication(@Req() request: Request) {
     return request['user'];
