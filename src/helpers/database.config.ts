@@ -1,8 +1,13 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionOptions';
+
+const sqliteConfig: SqliteConnectionOptions = {
+  type: 'sqlite',
+  database: '.db/operations.db',
+};
 
 export const DATABASE_CONFIG: TypeOrmModuleOptions = {
-  type: 'sqlite',
-  database: '.db/operations.db', //process.env.DATABASE_NAME as string,
+  ...sqliteConfig,
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   synchronize: false,
   autoLoadEntities: true,
