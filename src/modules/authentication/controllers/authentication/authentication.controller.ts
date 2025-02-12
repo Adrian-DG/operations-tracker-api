@@ -35,8 +35,7 @@ export class AuthenticationController {
   }
 
   @Get('is-authenticated')
-  @UseGuards(AuthGuard, PermissionsGuard)
-  @HasPermissions(Permissions.CREATE_EVENTS)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Check if user is authenticated' })
   checkAuthentication(@Req() request: Request) {
     return request['user'];
