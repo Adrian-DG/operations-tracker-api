@@ -5,54 +5,40 @@ import { Repository } from 'typeorm';
 import { ActivityType } from '../entities/activity-type.entity';
 import { ActivityImage } from '../entities/activity-image.entity';
 import { CreateActivityDto } from '../dto/create-activity.dto';
+import { ActivityTypeService } from './activity-types.service';
+import { ActivityImagesService } from './activity-images.service';
 
 @Injectable()
 export class ActivityService {
   constructor(
     @InjectRepository(Activity)
-    private readonly _activityRepository: Repository<Activity>,
-    @InjectRepository(ActivityType)
-    private readonly _activityTypeRepository: Repository<ActivityType>,
-    @InjectRepository(ActivityImage)
-    private readonly _activityImageRepository: Repository<ActivityImage>,
+    private readonly _repository: Repository<Activity>,
+    private readonly _activityTypeService: ActivityTypeService,
+    private readonly _activityImageService: ActivityImagesService,
   ) {}
 
-  private async findActivityType(type: number) {
-    return this._activityTypeRepository.findOne({ where: { id: type } });
-  }
-
-  private async saveImages(images: string[], activity: Activity) {
-    const activityImages = images.map((image) =>
-      this._activityImageRepository.create({
-        image: Buffer.from(image, 'base64'),
-        activity,
-      }),
-    );
-
-    return this._activityImageRepository.save(activityImages);
-  }
-
   async createActivity(payload: CreateActivityDto) {
-    const activityType = await this.findActivityType(payload.type);
+    const activityType = await this._activityTypeService.findOne(payload.type);
 
     if (!activityType) throw new Error('Invalid activity type');
 
     const { images, ...activityPayload } = payload;
 
-    const activity = this._activityRepository.create({
+    const activity = this._repository.create({
       ...activityPayload,
       type: activityType,
     });
 
-    await this._activityRepository.save(activity);
+    await this._repository.save(activity);
 
-    if (images.length > 0) await this.saveImages(images, activity);
+    if (images.length > 0)
+      await this._activityImageService.saveImages(images, activity);
 
     return { ...activity, type: activityType };
   }
 
   async findAllActivities() {
-    return this._activityRepository.find({
+    return this._repository.find({
       relations: { type: true, images: true },
       select: {
         id: true,
