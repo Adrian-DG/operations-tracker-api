@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ActivityStatus } from '../enums/activity-status.enum';
 import { IsArray, IsDate, IsEnum, IsNumber, IsString } from 'class-validator';
+import { CreateActivityDocument } from './create-activity-document.dto';
 
 export class CreateActivityDto {
   @ApiProperty()
@@ -29,6 +30,6 @@ export class CreateActivityDto {
   readonly type: number;
 
   @IsArray()
-  @ApiProperty({ type: 'string', isArray: true })
-  images: string[];
+  @ApiProperty({ type: CreateActivityDocument, isArray: true })
+  documents: CreateActivityDocument[];
 }

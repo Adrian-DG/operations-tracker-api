@@ -4,7 +4,7 @@ import { Activity } from '../entities/activity.entity';
 import { Repository } from 'typeorm';
 import { CreateActivityDto } from '../dto/create-activity.dto';
 import { ActivityTypeService } from './activity-types.service';
-import { ActivityImagesService } from './activity-images.service';
+import { ActivityImagesService } from './activity-document.service';
 
 @Injectable()
 export class ActivityService {
@@ -20,7 +20,7 @@ export class ActivityService {
 
     if (!activityType) throw new Error('Invalid activity type');
 
-    const { images, ...activityPayload } = payload;
+    const { documents, ...activityPayload } = payload;
 
     const activity = this._repository.create({
       ...activityPayload,
@@ -29,8 +29,8 @@ export class ActivityService {
 
     await this._repository.save(activity);
 
-    if (images.length > 0)
-      await this._activityImageService.saveImages(images, activity);
+    if (documents.length > 0)
+      await this._activityImageService.saveDocuments(documents, activity);
 
     return { ...activity, type: activityType };
   }
