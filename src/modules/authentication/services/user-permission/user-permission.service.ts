@@ -12,13 +12,12 @@ export class UserPermissionService {
   ) {}
 
   assignPermissionsToUser(user: User, permissions: string[]) {
-    return this._repository.save(
-      permissions.map((permission) => {
-        const userPermission = new UserPermission();
-        userPermission.name = permission;
-        userPermission.user = user;
-        return userPermission;
-      }),
-    );
+    const userPermissions = permissions.map((permission) => {
+      const userPermission = new UserPermission();
+      userPermission.name = permission;
+      userPermission.user = user;
+      return userPermission;
+    });
+    return this._repository.save(userPermissions);
   }
 }
