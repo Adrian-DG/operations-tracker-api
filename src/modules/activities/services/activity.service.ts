@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Activity } from '../entities/activity.entity';
 import { Repository } from 'typeorm';
-import { ActivityType } from '../entities/activity-type.entity';
-import { ActivityImage } from '../entities/activity-image.entity';
 import { CreateActivityDto } from '../dto/create-activity.dto';
 import { ActivityTypeService } from './activity-types.service';
 import { ActivityImagesService } from './activity-images.service';
@@ -39,7 +37,7 @@ export class ActivityService {
 
   async findAllActivities() {
     return this._repository.find({
-      relations: { type: true, images: true },
+      relations: { type: true, documents: true },
       select: {
         id: true,
         name: true,
