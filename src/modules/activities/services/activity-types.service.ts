@@ -11,7 +11,9 @@ export class ActivityTypeService {
   ) {}
 
   async findAll() {
-    return this._repository.find();
+    return this._repository.find({
+      select: ['id', 'name'],
+    });
   }
 
   async findOne(type: number) {
