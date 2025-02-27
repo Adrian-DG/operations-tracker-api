@@ -20,4 +20,13 @@ export class UserPermissionService {
     });
     return this._repository.save(userPermissions);
   }
+
+  async getUserPermissions(user: User): Promise<string[]> {
+    const userPermissions = await this._repository.find({
+      where: { user: { id: user.id } },
+      select: { name: true },
+    });
+
+    return userPermissions.map((permission) => permission.name);
+  }
 }
