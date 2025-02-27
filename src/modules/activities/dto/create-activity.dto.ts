@@ -11,11 +11,23 @@ export class CreateActivityDto {
   readonly description: string;
 
   @IsDate()
-  @ApiProperty()
+  @ApiProperty({
+    type: Date,
+    required: true,
+    description: 'The start date of the activity',
+    default: new Date(),
+    format: 'date-time',
+  })
   readonly startDate: Date;
 
   @IsDate()
-  @ApiProperty()
+  @ApiProperty({
+    type: Date,
+    required: true,
+    description: 'The end date of the activity',
+    default: new Date(),
+    format: 'date-time',
+  })
   readonly endDate: Date;
 
   @ApiProperty()

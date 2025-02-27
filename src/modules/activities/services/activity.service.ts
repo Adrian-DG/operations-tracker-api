@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Activity } from '../entities/activity.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateActivityDto } from '../dto/create-activity.dto';
 import { ActivityTypeService } from './activity-types.service';
 import { ActivityImagesService } from './activity-document.service';
@@ -35,18 +35,17 @@ export class ActivityService {
     return { ...activity, type: activityType };
   }
 
-  async findAllActivities() {
-    return this._repository.find({
+  async findAllActivities(page: number, limit: number, search: string) {
+    const [activities, total] = await this._repository.findAndCount({
       relations: { type: true, documents: true },
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        startDate: true,
-        endDate: true,
-        location: true,
-        status: true,
+      where: {
+        name: Like(`%${search ?? ''}%`),
       },
+      take: limit,
+      skip: (page - 1) * limit,
+      select: { id: true, name: true, description: true, type: { name: true } },
     });
+
+    return { activities, total };
   }
 }
