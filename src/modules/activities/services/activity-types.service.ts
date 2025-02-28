@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ActivityType } from '../entities/activity-type.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
+import { PagedData } from 'src/modules/shared/models/paged-data.model';
 
 @Injectable()
 export class ActivityTypeService {
@@ -10,10 +11,16 @@ export class ActivityTypeService {
     private readonly _repository: Repository<ActivityType>,
   ) {}
 
-  async findAll() {
-    return this._repository.find({
-      select: ['id', 'name'],
+  async findAll(page: number, limit: number, search: string) {
+    const [data, total] = await this._repository.findAndCount({
+      where: { name: Like(`%${search}%`) },
+      take: limit,
+      skip: (page - 1) * limit,
+      select: { id: true, name: true },
+      order: { name: 'ASC' },
     });
+
+    return { data, total } as PagedData<any>;
   }
 
   async findOne(type: number) {

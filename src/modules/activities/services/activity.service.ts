@@ -5,6 +5,7 @@ import { Like, Repository } from 'typeorm';
 import { CreateActivityDto } from '../dto/create-activity.dto';
 import { ActivityTypeService } from './activity-types.service';
 import { ActivityImagesService } from './activity-document.service';
+import { PagedData } from 'src/modules/shared/models/paged-data.model';
 
 @Injectable()
 export class ActivityService {
@@ -36,16 +37,22 @@ export class ActivityService {
   }
 
   async findAllActivities(page: number, limit: number, search: string) {
-    const [activities, total] = await this._repository.findAndCount({
-      relations: { type: true, documents: true },
+    const [data, total] = await this._repository.findAndCount({
+      relations: { type: true },
       where: {
         name: Like(`%${search ?? ''}%`),
       },
       take: limit,
       skip: (page - 1) * limit,
-      select: { id: true, name: true, description: true, type: { name: true } },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        location: true,
+        type: { name: true },
+      },
     });
 
-    return { activities, total };
+    return { data, total } as PagedData<any>;
   }
 }
