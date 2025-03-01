@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateActivityTypeDto {
-  @ApiProperty()
+  @ApiProperty({ required: true })
   name: string;
 }

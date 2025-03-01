@@ -6,7 +6,7 @@ import { ActivityDocument } from '../entities/activity-document.entity';
 import { CreateActivityDocument } from '../dto/create-activity-document.dto';
 
 @Injectable()
-export class ActivityImagesService {
+export class ActivityDocumentService {
   constructor(
     @InjectRepository(ActivityDocument)
     private readonly _repository: Repository<ActivityDocument>,
@@ -15,6 +15,7 @@ export class ActivityImagesService {
   async saveDocuments(documents: CreateActivityDocument[], activity: Activity) {
     const activityDocs = documents.map((document) =>
       this._repository.create({
+        name: document.name,
         file: document.file,
         mimeType: document.mimeType,
         Activity: activity,

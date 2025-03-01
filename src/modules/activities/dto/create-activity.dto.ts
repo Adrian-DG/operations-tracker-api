@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ActivityStatus } from '../enums/activity-status.enum';
-import { IsArray, IsDate, IsEnum, IsNumber, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsDate,
+  IsDateString,
+  IsEnum,
+  IsNumber,
+  IsString,
+} from 'class-validator';
 import { CreateActivityDocument } from './create-activity-document.dto';
 
 export class CreateActivityDto {
@@ -10,7 +17,6 @@ export class CreateActivityDto {
   @ApiProperty()
   readonly description: string;
 
-  @IsDate()
   @ApiProperty({
     type: Date,
     required: true,
@@ -18,9 +24,8 @@ export class CreateActivityDto {
     default: new Date(),
     format: 'date-time',
   })
-  readonly startDate: Date;
+  readonly startDate: string;
 
-  @IsDate()
   @ApiProperty({
     type: Date,
     required: true,
@@ -28,13 +33,17 @@ export class CreateActivityDto {
     default: new Date(),
     format: 'date-time',
   })
-  readonly endDate: Date;
+  readonly endDate: string;
 
   @ApiProperty()
   readonly location: string;
 
   @IsEnum(ActivityStatus)
-  @ApiProperty({ enum: ActivityStatus, required: true })
+  @ApiProperty({
+    enum: ActivityStatus,
+    required: true,
+    default: ActivityStatus.IN_PROGRESS,
+  })
   readonly status: ActivityStatus;
 
   @IsNumber()
