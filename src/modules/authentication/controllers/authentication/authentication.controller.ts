@@ -18,6 +18,7 @@ export class AuthenticationController {
   @ApiBody({ type: LoginUserDto })
   @ApiResponse({ status: 200, description: 'User signed in' })
   async signIn(@Body() payload: LoginUserDto) {
+    console.log('payload', payload);
     const result = await this._authService.signIn(
       payload.username,
       payload.password,

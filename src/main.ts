@@ -5,7 +5,10 @@ import { SwaggerModule } from '@nestjs/swagger';
 import { documentFactory } from './helpers/swagger.config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule, {
+    cors: true,
+    logger: ['error', 'warn', 'log'],
+  });
 
   SwaggerModule.setup('api', app, documentFactory(app));
 
