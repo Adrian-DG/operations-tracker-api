@@ -37,7 +37,7 @@ export class ActivityService {
   }
 
   async findAllActivities(page: number, limit: number, search: string) {
-    const [data, total] = await this._repository.findAndCount({
+    const [records, total] = await this._repository.findAndCount({
       relations: { type: true },
       where: {
         name: Like(`%${search ?? ''}%`),
@@ -53,6 +53,6 @@ export class ActivityService {
       },
     });
 
-    return { data, total } as PagedData<any>;
+    return { records, total } as PagedData<any>;
   }
 }

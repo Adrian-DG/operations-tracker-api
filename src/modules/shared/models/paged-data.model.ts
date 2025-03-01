@@ -1,4 +1,4 @@
 export class PagedData<T> {
-  data: T[];
+  records: T[];
   total: number;
 }
