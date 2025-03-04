@@ -1,15 +1,15 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionOptions';
 
-const sqlServerProductionConfig: TypeOrmModuleOptions = {
-  type: 'mssql',
-  host: 'MOPC-SRV-ASISTENCIA\SQLEXPRES',
-  port: 1433,
-  username: 'operaciones',
-  password: 'op_estadistica@S3',
-  database: 'Operations_Tracker_DB',
-  options: { encrypt: false, trustServerCertificate: true },
-};
+// const sqlServerProductionConfig: TypeOrmModuleOptions = {
+//   type: 'mssql',
+//   host: 'MOPC-SRV-ASISTENCIA\SQLEXPRES',
+//   port: 1433,
+//   username: 'operaciones',
+//   password: 'op_estadistica@S3',
+//   database: 'Operations_Tracker_DB',
+//   options: { encrypt: false, trustServerCertificate: true },
+// };
 
 const sqlServerDevelopmentConfig: TypeOrmModuleOptions = {
   type: 'mssql',
@@ -35,7 +35,7 @@ const sqlServerDevelopmentConfig: TypeOrmModuleOptions = {
 // };
 
 export const DATABASE_CONFIG: TypeOrmModuleOptions = {
-  ...sqlServerProductionConfig,
+  ...sqlServerDevelopmentConfig,
   // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   synchronize: true,
   autoLoadEntities: true,
