@@ -1,18 +1,25 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionOptions';
 
-// const sqlServerProductionConfig: TypeOrmModuleOptions = {
-//   type: 'mssql',
-//   host: 'tcp:asistenciavialdbserver.database.windows.net',
-//   authentication: {
-//     type: 'default',
-//     options: { userName: 'SqlAdmin', password: 'Mopc8044' },
-//   },
-//   username: 'SqlAdmin',
-//   password: 'Mopc8044',
-//   database: 'asistenciaVialDb',
-//   options: { encrypt: true, trustServerCertificate: false },
-// };
+const sqlServerProductionConfig: TypeOrmModuleOptions = {
+  type: 'mssql',
+  host: 'MOPC-SRV-ASISTENCIA\SQLEXPRES',
+  port: 1433,
+  username: 'operaciones',
+  password: 'op_estadistica@S3',
+  database: 'Operations_Tracker_DB',
+  options: { encrypt: false, trustServerCertificate: true },
+};
+
+const sqlServerDevelopmentConfig: TypeOrmModuleOptions = {
+  type: 'mssql',
+  host: 'localhost',
+  port: 1433,
+  username: 'addg',
+  password: 'addg2396',
+  database: 'Operations_Tracker_DB',
+  options: { encrypt: false, trustServerCertificate: true },
+};
 
 // const sqlServerDevelopmentConfig: TypeOrmModuleOptions = {
 //   type: 'mssql',
@@ -22,13 +29,13 @@ import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionO
 //   database: 'Operations_Tracker_DB',
 // };
 
-const sqliteConfig: SqliteConnectionOptions = {
-  type: 'sqlite',
-  database: '.db/operations.db',
-};
+// const sqliteConfig: SqliteConnectionOptions = {
+//   type: 'sqlite',
+//   database: '.db/operations.db',
+// };
 
 export const DATABASE_CONFIG: TypeOrmModuleOptions = {
-  ...sqliteConfig,
+  ...sqlServerProductionConfig,
   // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   synchronize: true,
   autoLoadEntities: true,
