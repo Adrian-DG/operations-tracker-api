@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ActivityType } from '../entities/activity-type.entity';
 import { Like, Repository } from 'typeorm';
 import { PagedData } from 'src/modules/shared/models/paged-data.model';
-import { act } from 'react';
 
 @Injectable()
 export class ActivityTypeService {
