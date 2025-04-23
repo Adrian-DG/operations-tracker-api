@@ -36,7 +36,7 @@ const sqlServerDevelopmentConfig: TypeOrmModuleOptions = {
 
 export const DATABASE_CONFIG: TypeOrmModuleOptions = {
   ...sqlServerDevelopmentConfig,
-  // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   synchronize: true,
   autoLoadEntities: true,
   retryAttempts: 3,
