@@ -4,7 +4,7 @@ import { ActivityType } from './activity-type.entity';
 import { ActivityStatus } from '../enums/activity-status.enum';
 import { ActivityDocument } from './activity-document.entity';
 
-@Entity({ name: 'activities' })
+@Entity({ name: 'activities', schema: 'act' })
 export class Activity extends BaseEntityMetadata {
   @Column()
   name: string;
@@ -24,7 +24,9 @@ export class Activity extends BaseEntityMetadata {
   @Column()
   status: ActivityStatus;
 
-  @ManyToOne(() => ActivityType, (activityType) => activityType.activities)
+  @ManyToOne(() => ActivityType, (activityType) => activityType.activity, {
+    eager: true,
+  })
   type: ActivityType;
 
   @OneToMany(

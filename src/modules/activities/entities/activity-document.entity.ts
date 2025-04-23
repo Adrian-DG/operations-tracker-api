@@ -3,7 +3,7 @@ import { NamedEntity } from 'src/modules/shared/abstraction/named-entity-metadat
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { Activity } from './activity.entity';
 
-@Entity({ name: 'activity_documents' })
+@Entity({ name: 'activity_documents', schema: 'act' })
 export class ActivityDocument extends NamedEntity {
   @Column()
   file: string;

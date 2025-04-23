@@ -9,16 +9,27 @@ import { ActivityDocument } from './entities/activity-document.entity';
 import { ActivityTypesController } from './controllers/activity-types.controller';
 import { ActivityDocumentService } from './services/activity-document.service';
 import { ActivitySubType } from './entities/activity-subtype.entity';
+import { ActivitySubTypeService } from './services/activity-subtype.service';
+import { ActivitySubtypesController } from './controllers/activity-subtype.controller';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Activity, ActivityType, ActivityDocument]),
+    TypeOrmModule.forFeature([
+      Activity,
+      ActivityType,
+      ActivitySubType,
+      ActivityDocument,
+    ]),
   ],
-  controllers: [ActivityController, ActivityTypesController],
+  controllers: [
+    ActivityController,
+    ActivityTypesController,
+    ActivitySubtypesController,
+  ],
   providers: [
     ActivityService,
     ActivityTypeService,
-    ActivitySubType,
+    ActivitySubTypeService,
     ActivityDocumentService,
   ],
 })

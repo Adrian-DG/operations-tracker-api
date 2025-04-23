@@ -20,9 +20,9 @@ import { CreateActivityTypeDto } from '../dto/create-activity-type.dto';
 import { PaginationFilter } from 'src/modules/shared/dto/pagination-filter.dto';
 import { UpdateActivityType } from '../dto/update-activity-type.dt';
 
-@UseGuards(AuthGuard, PermissionsGuard)
 @ApiTags('activity-types')
 @Controller('activity-types')
+@UseGuards(AuthGuard, PermissionsGuard)
 export class ActivityTypesController {
   constructor(private readonly _activityTypeService: ActivityTypeService) {}
 
