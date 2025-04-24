@@ -22,7 +22,7 @@ export class Activity extends BaseEntityMetadata {
   @Column()
   endDate: Date;
 
-  @Column()
+  @Column({ default: ActivityStatus.PENDING })
   status: ActivityStatus;
 
   @ManyToOne(() => ActivityType, (activityType) => activityType.activity, {
