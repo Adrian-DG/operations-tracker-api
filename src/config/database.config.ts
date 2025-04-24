@@ -56,17 +56,13 @@ const DATABASE_CONFIG = {
   database: process.env.DATABASE_NAME,
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/../migrations/**/*{.ts,.js}'],
-  synchronize: process.env.NODE_ENV !== 'production',
-  autoLoadEntities: true,
+  synchronize: false,
+  autoLoadEntities: false,
   retryAttempts: 3,
   retryDelay: 3000,
   logger: 'debug',
   logging: true,
 };
-
-console.log('Database Config:', {
-  ...DATABASE_CONFIG,
-});
 
 export default registerAs('DATABASE_CONFIG', () => DATABASE_CONFIG);
 export const connectionSource = new DataSource(

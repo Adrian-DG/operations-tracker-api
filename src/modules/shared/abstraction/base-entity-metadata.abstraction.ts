@@ -1,10 +1,11 @@
 import {
+  BaseEntity,
   CreateDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-export abstract class BaseEntityMetadata {
+export abstract class BaseEntityMetadata extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

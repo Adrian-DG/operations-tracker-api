@@ -3,10 +3,10 @@ import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class $npmConfigName1745499991700 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.createDatabase('Operations_Tracker_DB', true);
+
     await queryRunner.createSchema('auth', true);
     await queryRunner.createSchema('act', true);
-
-    await queryRunner.createDatabase('Operations_Tracker_DB', true);
 
     await queryRunner.createTable(
       new Table({
@@ -206,6 +206,7 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
             type: 'int',
             isNullable: false,
             enum: Object.values(ActivityStatus),
+            default: 1,
           },
           {
             name: 'typeId',
