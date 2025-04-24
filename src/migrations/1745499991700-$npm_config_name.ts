@@ -280,35 +280,14 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey(
-      'act.activity_subtypes',
-      'FK_activity_subtypes_activity_types',
-    );
-    await queryRunner.dropForeignKey(
-      'act.activity_documents',
-      'FK_activity_documents_activities',
-    );
+    await queryRunner.dropTable('act.activity_type', true);
 
-    await queryRunner.dropForeignKey(
-      'act.activities',
-      'FK_activities_activity_types',
-    );
+    await queryRunner.dropTable('act.activity_subtypes', true);
+    await queryRunner.dropTable('act.activity_types', true);
+    await queryRunner.dropTable('act.activity_documents', true);
+    await queryRunner.dropTable('act.activities', true);
 
-    await queryRunner.dropForeignKey(
-      'auth.user_permissions',
-      'FK_user_permissions_users',
-    );
-    await queryRunner.dropForeignKey(
-      'auth.user_permissions',
-      'FK_user_permissions_users',
-    );
-
-    await queryRunner.dropTable('act.activity_subtypes');
-    await queryRunner.dropTable('act.activity_types');
-    await queryRunner.dropTable('act.activity_documents');
-    await queryRunner.dropTable('act.activities');
-
-    await queryRunner.dropTable('auth.user_permissions');
-    await queryRunner.dropTable('auth.users');
+    await queryRunner.dropTable('auth.user_permissions', true);
+    await queryRunner.dropTable('auth.users', true);
   }
 }
