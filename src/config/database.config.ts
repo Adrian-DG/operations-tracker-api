@@ -50,11 +50,13 @@ const sqlServerDeveloperConfig: TypeOrmModuleOptions = {
 };
 
 const DATABASE_CONFIG = {
-  ...sqlServerProductionConfig,
+  ...(process.env.NODE_ENV !== 'production'
+    ? sqlServerDeveloperConfig
+    : sqlServerProductionConfig),
   database: process.env.DATABASE_NAME,
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/../migrations/**/*{.ts,.js}'],
-  synchronize: false, //process.env.NODE_ENV !== 'production',
+  synchronize: process.env.NODE_ENV !== 'production',
   autoLoadEntities: true,
   retryAttempts: 3,
   retryDelay: 3000,
