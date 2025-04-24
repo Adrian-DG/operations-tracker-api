@@ -2,7 +2,7 @@ import { BaseEntityMetadata } from 'src/modules/shared/abstraction/base-entity-m
 import { Column, Entity, OneToMany } from 'typeorm';
 import { UserPermission } from './user-permission.entity';
 
-@Entity({ name: 'users' })
+@Entity({ name: 'users', schema: 'auth' })
 export class User extends BaseEntityMetadata {
   @Column()
   username: string;

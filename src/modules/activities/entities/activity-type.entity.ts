@@ -7,7 +7,7 @@ import { ActivitySubType } from './activity-subtype.entity';
 export class ActivityType extends NamedEntity {
   @ManyToOne(() => Activity, (activity) => activity.type, {
     onDelete: 'NO ACTION',
-    eager: true,
+    eager: false,
   })
   activity: Activity;
 

@@ -7,7 +7,7 @@ export class ActivitySubType extends NamedEntity {
   @ManyToOne(
     () => ActivityType,
     (activityType) => activityType.activitySubTypes,
-    { eager: true },
+    { eager: false },
   )
   ActivityType: ActivityType;
 }
