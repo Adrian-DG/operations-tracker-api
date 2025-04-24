@@ -31,14 +31,14 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
           },
           {
             name: 'createdAt',
-            type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
+            type: 'datetime2',
+            default: 'GETDATE()',
           },
           {
             name: 'updatedAt',
-            type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
-            onUpdate: 'CURRENT_TIMESTAMP',
+            type: 'datetime2',
+            default: 'GETDATE()',
+            onUpdate: 'GETDATE()',
           },
         ],
       }),
@@ -67,21 +67,97 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
           },
           {
             name: 'createdAt',
-            type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
+            type: 'datetime2',
+            default: 'GETDATE()',
           },
           {
             name: 'updatedAt',
-            type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
-            onUpdate: 'CURRENT_TIMESTAMP',
+            type: 'datetime2',
+            default: 'GETDATE()',
+            onUpdate: 'GETDATE()',
           },
         ],
         foreignKeys: [
           {
             columnNames: ['userId'],
-            referencedTableName: 'users',
+            referencedTableName: 'auth.users',
             referencedColumnNames: ['id'],
+          },
+        ],
+      }),
+    );
+
+    await queryRunner.createTable(
+      new Table({
+        name: 'act.activity_types',
+        columns: [
+          {
+            name: 'id',
+            type: 'int',
+            isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'increment',
+          },
+          {
+            name: 'name',
+            type: 'nvarchar',
+            isNullable: false,
+          },
+          {
+            name: 'createdAt',
+            type: 'datetime',
+            default: 'GETDATE()',
+          },
+          {
+            name: 'updatedAt',
+            type: 'datetime',
+            default: 'GETDATE()',
+          },
+        ],
+      }),
+    );
+
+    await queryRunner.createTable(
+      new Table({
+        name: 'act.activity_subtypes',
+        columns: [
+          {
+            name: 'id',
+            type: 'int',
+            isPrimary: true,
+            isNullable: false,
+            isGenerated: true,
+            generationStrategy: 'increment',
+          },
+          {
+            name: 'name',
+            type: 'nvarchar',
+            isNullable: false,
+          },
+          {
+            name: 'activityTypeId',
+            type: 'int',
+            isNullable: false,
+          },
+          {
+            name: 'createdAt',
+            type: 'datetime2',
+            isNullable: false,
+            default: 'GETDATE()',
+          },
+          {
+            name: 'updatedAt',
+            type: 'datetime2',
+            isNullable: false,
+            default: 'GETDATE()',
+          },
+        ],
+        foreignKeys: [
+          {
+            columnNames: ['activityTypeId'],
+            referencedTableName: 'act.activity_types',
+            referencedColumnNames: ['id'],
+            onDelete: 'CASCADE',
           },
         ],
       }),
@@ -194,82 +270,6 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
           {
             columnNames: ['activityId'],
             referencedTableName: 'act.activities',
-            referencedColumnNames: ['id'],
-            onDelete: 'CASCADE',
-          },
-        ],
-      }),
-    );
-
-    await queryRunner.createTable(
-      new Table({
-        name: 'act.activity_types',
-        columns: [
-          {
-            name: 'id',
-            type: 'int',
-            isPrimary: true,
-            isGenerated: true,
-            generationStrategy: 'increment',
-          },
-          {
-            name: 'name',
-            type: 'nvarchar',
-            isNullable: false,
-          },
-          {
-            name: 'createdAt',
-            type: 'datetime',
-            default: 'GETDATE()',
-          },
-          {
-            name: 'updatedAt',
-            type: 'datetime',
-            default: 'GETDATE()',
-          },
-        ],
-      }),
-    );
-
-    await queryRunner.createTable(
-      new Table({
-        name: 'act.activity_subtypes',
-        columns: [
-          {
-            name: 'id',
-            type: 'int',
-            isPrimary: true,
-            isNullable: false,
-            isGenerated: true,
-            generationStrategy: 'increment',
-          },
-          {
-            name: 'name',
-            type: 'nvarchar',
-            isNullable: false,
-          },
-          {
-            name: 'activityTypeId',
-            type: 'int',
-            isNullable: false,
-          },
-          {
-            name: 'createdAt',
-            type: 'datetime2',
-            isNullable: false,
-            default: 'GETDATE()',
-          },
-          {
-            name: 'updatedAt',
-            type: 'datetime2',
-            isNullable: false,
-            default: 'GETDATE()',
-          },
-        ],
-        foreignKeys: [
-          {
-            columnNames: ['activityTypeId'],
-            referencedTableName: 'act.activity_types',
             referencedColumnNames: ['id'],
             onDelete: 'CASCADE',
           },
