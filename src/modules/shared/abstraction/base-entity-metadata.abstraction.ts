@@ -9,9 +9,19 @@ export abstract class BaseEntityMetadata extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @CreateDateColumn()
+  @CreateDateColumn({
+    name: 'created_at',
+    type: 'datetime',
+    default: () => 'GETDATE()',
+  })
   createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @UpdateDateColumn({
+    name: 'updated_at',
+    type: 'datetime',
+    default: () => null,
+    nullable: true,
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
+  updatedAt?: Date;
 }
