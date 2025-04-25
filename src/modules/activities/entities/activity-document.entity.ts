@@ -5,10 +5,10 @@ import { Activity } from './activity.entity';
 
 @Entity({ name: 'activity_documents', schema: 'act' })
 export class ActivityDocument extends NamedEntity {
-  @Column()
+  @Column({ type: 'nvarchar', length: 255 })
   file: string;
 
-  @Column()
+  @Column({ type: 'nvarchar', length: 60 })
   mimeType: string;
 
   @ManyToOne(() => Activity, (activity) => activity.documents, {
