@@ -1,5 +1,6 @@
 export enum ActivityStatus {
-  PENDING = 'PENDING',
-  IN_PROGRESS = 'IN_PROGRESS',
-  DONE = 'DONE',
+  PENDING = 'PENDIENTE',
+  IN_PROGRESS = 'EN PROGRESO',
+  DONE = 'COMPLETADA',
+  CANCELLED = 'CANCELADA',
 }

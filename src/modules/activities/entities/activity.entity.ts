@@ -31,7 +31,7 @@ export class Activity extends BaseEntityMetadata {
   endDate: Date;
 
   @Column({
-    type: 'enum',
+    type: 'nvarchar',
     name: 'activity_status',
     default: ActivityStatus.PENDING,
   })

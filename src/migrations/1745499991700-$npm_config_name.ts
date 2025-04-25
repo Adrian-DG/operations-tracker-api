@@ -205,18 +205,20 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
           {
             name: 'name',
             type: 'nvarchar',
-            length: '255',
+            length: '150',
             isNullable: false,
           },
           {
             name: 'description',
             type: 'nvarchar',
             isNullable: true,
+            length: '255',
           },
           {
             name: 'location',
             type: 'nvarchar',
             isNullable: true,
+            length: '255',
           },
           {
             name: 'start_date',
@@ -230,10 +232,10 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
           },
           {
             name: 'activity_status',
-            type: 'int',
+            type: 'nvarchar',
             isNullable: false,
-            enum: Object.values(ActivityStatus),
-            default: Object.values(ActivityStatus)[0],
+            default: `'PENDIENTE'`,
+            comment: 'Status of the activity',
           },
           {
             name: 'activity_type_id',
@@ -290,7 +292,7 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
           },
           {
             columnNames: ['activity_sub_type_id'],
-            name: 'FK_Activity_ActivityType',
+            name: 'FK_Activity_Sub_ActivityType',
             referencedTableName: 'act.activity_subtypes',
             referencedColumnNames: ['id'],
             onDelete: 'NO ACTION',
