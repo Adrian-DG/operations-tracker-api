@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ActivityService } from '../services/activity.service';
 import { CreateActivityDto } from '../dto/create-activity.dto';
@@ -7,6 +15,7 @@ import { HasPermissions } from 'src/modules/authentication/decorators/permission
 import { Permissions } from 'src/modules/authentication/enums/Permissions.enum';
 import { PermissionsGuard } from 'src/modules/authentication/guards/Permissions.guard';
 import { PaginationFilter } from 'src/modules/shared/dto/pagination-filter.dto';
+import { request } from 'http';
 
 @UseGuards(AuthGuard, PermissionsGuard)
 @ApiTags('activities')
@@ -23,7 +32,10 @@ export class ActivityController {
 
   @Post()
   @HasPermissions(Permissions.CREATE_ACTIVITIES)
-  async createActivity(@Body() payload: CreateActivityDto) {
-    return this._activityService.createActivity(payload);
+  async createActivity(
+    @Body() payload: CreateActivityDto,
+    @Req() request: Request,
+  ) {
+    return this._activityService.createActivity(payload, request['user'].id);
   }
 }

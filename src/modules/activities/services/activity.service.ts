@@ -15,7 +15,7 @@ export class ActivityService {
     private readonly _activityDocumentService: ActivityDocumentService,
   ) {}
 
-  async createActivity(payload: CreateActivityDto) {
+  async createActivity(payload: CreateActivityDto, createdBy: number) {
     const { documents, ...activityPayload } = payload;
 
     return await this._repository.manager.transaction(async (entityManager) => {
@@ -26,6 +26,7 @@ export class ActivityService {
         activityStatus: payload.status,
         activityTypeId: payload.type,
         activitySubTypeId: payload.subType,
+        createdBy: createdBy,
       });
 
       await entityManager.save(activity);
