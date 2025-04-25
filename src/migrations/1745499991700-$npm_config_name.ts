@@ -3,8 +3,6 @@ import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class $npmConfigName1745499991700 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.createDatabase('Operations_Tracker_DB', true);
-
     await queryRunner.createSchema('auth', true);
     await queryRunner.createSchema('act', true);
 
@@ -18,15 +16,18 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',
+            primaryKeyConstraintName: 'PK_User',
           },
           {
             name: 'username',
             type: 'varchar',
+            length: '50',
             isNullable: false,
           },
           {
             name: 'passwordHash',
             type: 'varchar',
+            comment: 'Hashed password',
             isNullable: false,
           },
           {
@@ -54,6 +55,7 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',
+            primaryKeyConstraintName: 'PK_User_Permission',
           },
           {
             name: 'userId',
@@ -80,8 +82,10 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
         foreignKeys: [
           {
             columnNames: ['userId'],
+            name: 'FK_User_Permission_User',
             referencedTableName: 'auth.users',
             referencedColumnNames: ['id'],
+            onDelete: 'NO ACTION',
           },
         ],
       }),
@@ -97,6 +101,7 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',
+            primaryKeyConstraintName: 'PK_Activity_Type',
           },
           {
             name: 'name',
@@ -128,6 +133,7 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
             isNullable: false,
             isGenerated: true,
             generationStrategy: 'increment',
+            primaryKeyConstraintName: 'PK_Activity_Subtype',
           },
           {
             name: 'name',
@@ -155,6 +161,7 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
         foreignKeys: [
           {
             columnNames: ['activityTypeId'],
+            name: 'FK_Activity_Subtype_ActivityType',
             referencedTableName: 'act.activity_types',
             referencedColumnNames: ['id'],
             onDelete: 'CASCADE',
@@ -173,6 +180,7 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',
+            primaryKeyConstraintName: 'PK_Activity',
           },
           {
             name: 'name',
@@ -227,9 +235,10 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
         foreignKeys: [
           {
             columnNames: ['typeId'],
+            name: 'FK_Activity_ActivityType',
             referencedTableName: 'act.activity_types',
             referencedColumnNames: ['id'],
-            onDelete: 'CASCADE',
+            onDelete: 'NO ACTION',
           },
         ],
       }),
@@ -245,6 +254,7 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',
+            primaryKeyConstraintName: 'PK_Activity_Document',
           },
           {
             name: 'activityId',
@@ -270,6 +280,7 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
         foreignKeys: [
           {
             columnNames: ['activityId'],
+            name: 'FK_Activity_Document_Activity',
             referencedTableName: 'act.activities',
             referencedColumnNames: ['id'],
             onDelete: 'CASCADE',
@@ -280,7 +291,22 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('act.activity_type', true);
+    await queryRunner.dropForeignKey(
+      'act.activity_documents',
+      'FK_Activity_Document_Activity',
+    );
+    await queryRunner.dropForeignKey(
+      'act.activities',
+      'FK_Activity_ActivityType',
+    );
+    await queryRunner.dropForeignKey(
+      'act.activity_subtypes',
+      'FK_Activity_Subtype_ActivityType',
+    );
+    await queryRunner.dropForeignKey(
+      'auth.user_permissions',
+      'FK_User_Permission_User',
+    );
 
     await queryRunner.dropTable('act.activity_subtypes', true);
     await queryRunner.dropTable('act.activity_types', true);
