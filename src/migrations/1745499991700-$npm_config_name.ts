@@ -63,9 +63,14 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'permission',
+            name: 'name',
             type: 'varchar',
             isNullable: false,
+          },
+          {
+            name: 'description',
+            type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'createdAt',
@@ -191,13 +196,12 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
           {
             name: 'description',
             type: 'nvarchar',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'location',
             type: 'nvarchar',
-            length: '255',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'startDate',
@@ -262,7 +266,17 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'documentUrl',
+            name: 'name',
+            type: 'nvarchar',
+            isNullable: false,
+          },
+          {
+            name: 'file',
+            type: 'nvarchar',
+            isNullable: false,
+          },
+          {
+            name: 'mimeType',
             type: 'nvarchar',
             isNullable: false,
           },
