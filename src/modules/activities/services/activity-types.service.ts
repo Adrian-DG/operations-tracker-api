@@ -14,9 +14,9 @@ export class ActivityTypeService {
   async findAll(page: number, limit: number, search: string) {
     const [records, total] = await this._repository.findAndCount({
       where: { name: Like(`%${search}%`) },
+      select: { id: true, name: true },
       take: limit,
       skip: (page - 1) * limit,
-      select: { id: true, name: true },
       order: { name: 'ASC' },
     });
 
