@@ -12,39 +12,35 @@ export class ActivityService {
   constructor(
     @InjectRepository(Activity)
     private readonly _repository: Repository<Activity>,
-    private readonly _activityTypeService: ActivityTypeService,
     private readonly _activityDocumentService: ActivityDocumentService,
   ) {}
 
   async createActivity(payload: CreateActivityDto) {
-    console.log(payload);
-
-    const activityType = await this._activityTypeService.findOne(payload.type);
-
-    if (!activityType) throw new Error('Invalid activity type');
-
     const { documents, ...activityPayload } = payload;
 
-    const activity = this._repository.create({
-      ...activityPayload,
-      startDate: new Date(payload.startDate),
-      endDate: new Date(payload.endDate),
-      type: activityType,
+    return await this._repository.manager.transaction(async (entityManager) => {
+      const activity = entityManager.create(Activity, {
+        ...activityPayload,
+        startDate: new Date(payload.startDate),
+        endDate: new Date(payload.endDate),
+        activityStatus: payload.status,
+        activityTypeId: payload.type,
+        activitySubTypeId: payload.subType,
+      });
+
+      await entityManager.save(activity);
+
+      if (documents.length > 0) {
+        await this._activityDocumentService.saveDocuments(documents, activity);
+      }
+
+      return { ...activity };
     });
-
-    console.log(activity);
-
-    await this._repository.save(activity);
-
-    if (documents.length > 0)
-      await this._activityDocumentService.saveDocuments(documents, activity);
-
-    return { ...activity, type: activityType };
   }
 
   async findAllActivities(page: number, limit: number, search: string) {
     const [records, total] = await this._repository.findAndCount({
-      relations: { type: true },
+      relations: { activityType: true, activitySubType: true },
       where: {
         name: Like(`%${search ?? ''}%`),
       },
@@ -55,7 +51,8 @@ export class ActivityService {
         name: true,
         description: true,
         location: true,
-        type: { name: true },
+        activitySubType: { name: true },
+        activityType: { name: true },
         startDate: true,
         endDate: true,
       },

@@ -15,11 +15,11 @@ export class ActivitySubTypeService {
   async findAll(filters: PaginationFilter) {
     const { page, limit, search } = filters;
     const [records, total] = await this._repository.findAndCount({
-      relations: { ActivityType: true },
+      relations: { activities: true },
       where: {
         name: search ? Like(`%${search}%`) : '',
       },
-      select: { id: true, name: true, ActivityType: { id: true, name: true } },
+      select: { id: true, name: true, activities: { id: true, name: true } },
       take: limit,
       skip: (page - 1) * limit,
     });

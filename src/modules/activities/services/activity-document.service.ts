@@ -18,7 +18,7 @@ export class ActivityDocumentService {
         name: document.name,
         file: document.file,
         mimeType: document.mimeType,
-        Activity: activity,
+        activity: activity,
       }),
     );
 
