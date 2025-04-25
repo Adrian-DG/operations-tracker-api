@@ -1,13 +1,21 @@
 import { NamedEntity } from 'src/modules/shared/abstraction/named-entity-metadata.abstraction';
-import { Entity, ManyToOne } from 'typeorm';
+import { Entity, ManyToOne, OneToMany } from 'typeorm';
 import { ActivityType } from './activity-type.entity';
+import { Activity } from './activity.entity';
 
 @Entity({ name: 'activity_subtypes', schema: 'act' })
 export class ActivitySubType extends NamedEntity {
   @ManyToOne(
     () => ActivityType,
     (activityType) => activityType.activitySubTypes,
-    { eager: false },
+    {
+      onDelete: 'CASCADE',
+      eager: false,
+      cascade: false,
+    },
   )
-  ActivityType: ActivityType;
+  activityType: ActivityType;
+
+  @OneToMany(() => Activity, (activity) => activity.activitySubType)
+  activities: Activity[];
 }

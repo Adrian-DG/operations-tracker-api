@@ -11,6 +11,11 @@ export class ActivityDocument extends NamedEntity {
   @Column()
   mimeType: string;
 
-  @ManyToOne(() => Activity, (activity) => activity.documents)
-  Activity: Activity;
+  @ManyToOne(() => Activity, (activity) => activity.documents, {
+    onDelete: 'NO ACTION',
+    onUpdate: 'NO ACTION',
+    eager: false,
+    cascade: false,
+  })
+  activity: Activity;
 }

@@ -5,15 +5,12 @@ import { ActivitySubType } from './activity-subtype.entity';
 
 @Entity({ name: 'activity_types', schema: 'act' })
 export class ActivityType extends NamedEntity {
-  @ManyToOne(() => Activity, (activity) => activity.type, {
-    onDelete: 'NO ACTION',
+  @OneToMany(() => ActivitySubType, (subType) => subType.activityType, {
     eager: false,
-  })
-  activity: Activity;
-
-  @OneToMany(() => ActivitySubType, (subtype) => subtype.ActivityType, {
-    onDelete: 'CASCADE',
-    eager: true,
+    cascade: true,
   })
   activitySubTypes: ActivitySubType[];
+
+  @OneToMany(() => Activity, (activity) => activity.activityType)
+  activities: Activity[];
 }
