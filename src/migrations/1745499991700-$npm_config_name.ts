@@ -275,7 +275,7 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
             primaryKeyConstraintName: 'PK_Activity_Document',
           },
           {
-            name: 'activityId',
+            name: 'activity_id',
             type: 'int',
             isNullable: false,
           },
@@ -307,7 +307,7 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
         ],
         foreignKeys: [
           {
-            columnNames: ['activityId'],
+            columnNames: ['activity_id'],
             name: 'FK_Activity_Document_Activity',
             referencedTableName: 'act.activities',
             referencedColumnNames: ['id'],
