@@ -11,6 +11,7 @@ import { ActivityType } from './activity-type.entity';
 import { ActivityStatus } from '../enums/activity-status.enum';
 import { ActivityDocument } from './activity-document.entity';
 import { ActivitySubType } from './activity-subtype.entity';
+import { User } from 'src/modules/authentication/entities/user.entity';
 
 @Entity({ name: 'activities', schema: 'act' })
 export class Activity extends BaseEntityMetadata {
@@ -60,4 +61,18 @@ export class Activity extends BaseEntityMetadata {
     onDelete: 'CASCADE',
   })
   documents: ActivityDocument[];
+
+  @Column({ name: 'created_by', type: 'int', nullable: false })
+  createdBy: number;
+
+  @JoinColumn({ name: 'created_by' })
+  @ManyToOne(() => User, (user) => user.id, { eager: false })
+  createdByUser: User;
+
+  @Column({ name: 'updated_by', type: 'int', nullable: false })
+  updatedBy: number;
+
+  @JoinColumn({ name: 'updated_by' })
+  @ManyToOne(() => User, (user) => user.id, { eager: false })
+  updatedByUser: User;
 }
