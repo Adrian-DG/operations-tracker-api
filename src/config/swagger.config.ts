@@ -11,7 +11,6 @@ const securityOptions: SecuritySchemeObject = {
 const config = new DocumentBuilder()
   .setTitle('Operations Tracker API')
   .setDescription('The authentication API description')
-  .setBasePath('api')
   .addBearerAuth(securityOptions)
   .setVersion('1.0')
   .build();
