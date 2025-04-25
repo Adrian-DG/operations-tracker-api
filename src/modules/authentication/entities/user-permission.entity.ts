@@ -4,6 +4,8 @@ import { User } from './user.entity';
 
 @Entity({ name: 'user_permissions', schema: 'auth' })
 export class UserPermission extends NamedEntity {
+  @Column({ nullable: true })
+  description: string;
   @ManyToOne(() => User, (user) => user.permissions)
   user: User;
 }

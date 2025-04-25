@@ -3,7 +3,6 @@ import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { ActivityType } from './activity-type.entity';
 import { ActivityStatus } from '../enums/activity-status.enum';
 import { ActivityDocument } from './activity-document.entity';
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 @Entity({ name: 'activities', schema: 'act' })
 export class Activity extends BaseEntityMetadata {
@@ -27,12 +26,19 @@ export class Activity extends BaseEntityMetadata {
 
   @ManyToOne(() => ActivityType, (activityType) => activityType.activity, {
     eager: true,
+    onDelete: 'NO ACTION',
+    nullable: false,
   })
   type: ActivityType;
 
   @OneToMany(
     () => ActivityDocument,
     (activityDocument) => activityDocument.Activity,
+    {
+      eager: true,
+      cascade: true,
+      onDelete: 'CASCADE',
+    },
   )
   documents: ActivityDocument[];
 }
