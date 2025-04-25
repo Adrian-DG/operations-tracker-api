@@ -23,6 +23,8 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
             type: 'nvarchar',
             length: '50',
             isNullable: false,
+            isUnique: true,
+            comment: 'Unique username for the user',
           },
           {
             name: 'passwordHash',
@@ -58,7 +60,7 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
             primaryKeyConstraintName: 'PK_User_Permission',
           },
           {
-            name: 'userId',
+            name: 'user_id',
             type: 'int',
             isNullable: false,
           },
@@ -67,6 +69,7 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
             type: 'nvarchar',
             isNullable: false,
             length: '150',
+            isUnique: true,
           },
           {
             name: 'description',
@@ -88,11 +91,17 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
         ],
         foreignKeys: [
           {
-            columnNames: ['userId'],
+            columnNames: ['user_id'],
             name: 'FK_User_Permission_User',
             referencedTableName: 'auth.users',
             referencedColumnNames: ['id'],
             onDelete: 'NO ACTION',
+          },
+        ],
+        indices: [
+          {
+            columnNames: ['user_id'],
+            name: 'IDX_User_Permission_User',
           },
         ],
       }),
@@ -114,6 +123,8 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
             name: 'name',
             type: 'nvarchar',
             isNullable: false,
+            isUnique: true,
+            comment: 'Unique name for the activity type',
           },
           {
             name: 'created_at',
@@ -146,6 +157,8 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
             name: 'name',
             type: 'nvarchar',
             isNullable: false,
+            isUnique: true,
+            comment: 'Unique name for the activity subtype',
           },
           {
             name: 'activity_type_id',
@@ -242,8 +255,32 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
             type: 'datetime',
             default: 'GETDATE()',
           },
+          {
+            name: 'created_by',
+            type: 'int',
+            isNullable: false,
+          },
+          {
+            name: 'updated_by',
+            type: 'int',
+            isNullable: true,
+          },
         ],
         foreignKeys: [
+          {
+            columnNames: ['created_by'],
+            name: 'FK_Activity_User_Creator',
+            referencedTableName: 'auth.users',
+            referencedColumnNames: ['id'],
+            onDelete: 'NO ACTION',
+          },
+          {
+            columnNames: ['updated_by'],
+            name: 'FK_Activity_User_Updater',
+            referencedTableName: 'auth.users',
+            referencedColumnNames: ['id'],
+            onDelete: 'NO ACTION',
+          },
           {
             columnNames: ['activity_type_id'],
             name: 'FK_Activity_ActivityType',
@@ -304,8 +341,32 @@ export class $npmConfigName1745499991700 implements MigrationInterface {
             type: 'datetime',
             default: 'GETDATE()',
           },
+          {
+            name: 'created_by',
+            type: 'int',
+            isNullable: false,
+          },
+          {
+            name: 'updated_by',
+            type: 'int',
+            isNullable: true,
+          },
         ],
         foreignKeys: [
+          {
+            columnNames: ['created_by'],
+            name: 'FK_Activity_Document_User_Creator',
+            referencedTableName: 'auth.users',
+            referencedColumnNames: ['id'],
+            onDelete: 'NO ACTION',
+          },
+          {
+            columnNames: ['updated_by'],
+            name: 'FK_Activity_Document_User_Updater',
+            referencedTableName: 'auth.users',
+            referencedColumnNames: ['id'],
+            onDelete: 'NO ACTION',
+          },
           {
             columnNames: ['activity_id'],
             name: 'FK_Activity_Document_Activity',

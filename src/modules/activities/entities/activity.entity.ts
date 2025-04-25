@@ -30,7 +30,11 @@ export class Activity extends BaseEntityMetadata {
   @Column({ type: 'date', nullable: false, name: 'end_date' })
   endDate: Date;
 
-  @Column({ default: ActivityStatus.PENDING, name: 'activity_status' })
+  @Column({
+    type: 'enum',
+    name: 'activity_status',
+    default: ActivityStatus.PENDING,
+  })
   activityStatus: ActivityStatus;
 
   @Column({ type: 'int', nullable: false, name: 'activity_type_id' })
