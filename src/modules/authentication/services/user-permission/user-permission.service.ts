@@ -15,7 +15,7 @@ export class UserPermissionService {
     const userPermissions = permissions.map((permission) => {
       const userPermission = new UserPermission();
       userPermission.name = permission;
-      userPermission.user = user;
+      userPermission.userId = user.id;
       return userPermission;
     });
     return this._repository.save(userPermissions);

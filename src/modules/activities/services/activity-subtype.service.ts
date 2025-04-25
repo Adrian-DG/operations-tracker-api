@@ -4,6 +4,7 @@ import { ActivitySubType } from '../entities/activity-subtype.entity';
 import { Like, Repository } from 'typeorm';
 import { PaginationFilter } from 'src/modules/shared/dto/pagination-filter.dto';
 import { PagedData } from 'src/modules/shared/models/paged-data.model';
+import { CreateActivitySubTypeDto } from '../dto/create-activity-subtype.dto';
 
 @Injectable()
 export class ActivitySubTypeService {
@@ -25,5 +26,9 @@ export class ActivitySubTypeService {
     });
 
     return { records, total } as PagedData<any>;
+  }
+
+  async create(payload: CreateActivitySubTypeDto) {
+    return this._repository.save(payload);
   }
 }
