@@ -27,7 +27,7 @@ export class ActivityController {
   @Get()
   @HasPermissions(Permissions.VIEW_ACTIVITIES)
   async getAllActivities(@Query() filters: ActivityPaginationFilterDto) {
-    return this._activityService.findAllActivities(filters);
+    return await this._activityService.findAllActivities(filters);
   }
 
   @Post()
@@ -36,6 +36,9 @@ export class ActivityController {
     @Body() payload: CreateActivityDto,
     @Req() request: Request,
   ) {
-    return this._activityService.createActivity(payload, request['user'].id);
+    return await this._activityService.createActivity(
+      payload,
+      request['user'].id,
+    );
   }
 }

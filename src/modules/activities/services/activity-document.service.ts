@@ -22,6 +22,6 @@ export class ActivityDocumentService {
       }),
     );
 
-    return this._repository.save(activityDocs);
+    return await this._repository.save(activityDocs);
   }
 }

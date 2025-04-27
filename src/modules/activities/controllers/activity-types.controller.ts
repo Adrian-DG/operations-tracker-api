@@ -30,19 +30,19 @@ export class ActivityTypesController {
   @HasPermissions(Permissions.VIEW_ACTIVITY_TYPES)
   async getAllActivityTypes(@Query() filters: PaginationFilter) {
     const { page, limit, search } = filters;
-    return this._activityTypeService.findAll(page, limit, search);
+    return await this._activityTypeService.findAll(page, limit, search);
   }
 
   @Get('all')
   async getAllTypes() {
-    return this._activityTypeService.findAllTypes();
+    return await this._activityTypeService.findAllTypes();
   }
 
   @Post()
   @ApiBody({ type: CreateActivityTypeDto, required: true })
   @HasPermissions(Permissions.CREATE_ACTIVITY_TYPES)
   async createActivityType(@Body() payload: CreateActivityTypeDto) {
-    return this._activityTypeService.create(payload.name);
+    return await this._activityTypeService.create(payload.name);
   }
 
   @Put(':id')
@@ -53,7 +53,8 @@ export class ActivityTypesController {
     @Param('id', new ParseIntPipe()) id: number,
     @Body() payload: UpdateActivityType,
   ) {
-    if (payload.name) return this._activityTypeService.update(id, payload.name);
+    if (payload.name)
+      return await this._activityTypeService.update(id, payload.name);
     throw new Error('Name is required');
   }
 
@@ -61,6 +62,6 @@ export class ActivityTypesController {
   @ApiParam({ name: 'id', type: Number, required: true })
   @HasPermissions(Permissions.DELETE_ACTIVITY_TYPES)
   async deleteActivityType(@Param('id', new ParseIntPipe()) id: number) {
-    return this._activityTypeService.delete(id);
+    return await this._activityTypeService.delete(id);
   }
 }

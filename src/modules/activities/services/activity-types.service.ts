@@ -23,15 +23,15 @@ export class ActivityTypeService {
     return { records, total } as PagedData<any>;
   }
 
-  findAllTypes() {
-    return this._repository.find({
+  async findAllTypes() {
+    return await this._repository.find({
       select: { id: true, name: true },
       order: { name: 'ASC' },
     });
   }
 
   async findOne(type: number) {
-    return this._repository.findOne({ where: { id: type } });
+    return await this._repository.findOne({ where: { id: type } });
   }
 
   async create(payload: string) {
@@ -39,14 +39,14 @@ export class ActivityTypeService {
       name: payload,
     });
 
-    return this._repository.save(activityType);
+    return await this._repository.save(activityType);
   }
 
   async update(id: number, payload: string) {
     const activityType = await this._repository.findOne({ where: { id } });
     if (!activityType) return null;
     activityType.name = payload;
-    return this._repository.save(activityType);
+    return await this._repository.save(activityType);
   }
 
   async delete(id: number) {

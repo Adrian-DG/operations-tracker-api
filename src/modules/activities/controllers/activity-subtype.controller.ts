@@ -17,6 +17,7 @@ import { ActivitySubTypeService } from '../services/activity-subtype.service';
 import { HasPermissions } from 'src/modules/authentication/decorators/permissions.decorator';
 import { Permissions } from 'src/modules/authentication/enums/Permissions.enum';
 import { CreateActivitySubTypeDto } from '../dto/create-activity-subtype.dto';
+import { Public } from 'src/modules/authentication/strategies/public.strategy';
 
 @ApiTags('activity-subtypes')
 @Controller('activity-subtypes')
@@ -31,14 +32,14 @@ export class ActivitySubtypesController {
   @ApiQuery({ type: PaginationFilter, required: true })
   @HasPermissions(Permissions.VIEW_ACTIVITY_SUBTYPES)
   async getAllActivitySubtypes(@Query() filters: PaginationFilter) {
-    return this._activitySubTypeService.findAll(filters);
+    return await this._activitySubTypeService.findAll(filters);
   }
 
   @Post()
   @ApiOperation({ summary: 'Create a new activity subtype' })
   @HasPermissions(Permissions.CREATE_ACTIVITY_SUBTYPES)
   async createActivitySubType(@Body() payload: CreateActivitySubTypeDto) {
-    return this._activitySubTypeService.create(payload);
+    return await this._activitySubTypeService.create(payload);
   }
 
   @Put(':id')
@@ -48,6 +49,15 @@ export class ActivitySubtypesController {
     @Param('id', new ParseIntPipe()) id: number,
     @Body() payload: CreateActivitySubTypeDto,
   ) {
-    return this._activitySubTypeService.update(id, payload);
+    return await this._activitySubTypeService.update(id, payload);
+  }
+
+  @Public()
+  @Get('filter-by-type')
+  @ApiOperation({ summary: 'Get activity subtypes by activity type ID' })
+  async getActivitySubtypesByActivityTypeId(
+    @Query('type', new ParseIntPipe()) type: number,
+  ) {
+    return await this._activitySubTypeService.findByActivityType(type);
   }
 }
