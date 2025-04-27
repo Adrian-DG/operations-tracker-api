@@ -16,6 +16,7 @@ import { Permissions } from 'src/modules/authentication/enums/Permissions.enum';
 import { PermissionsGuard } from 'src/modules/authentication/guards/Permissions.guard';
 import { PaginationFilter } from 'src/modules/shared/dto/pagination-filter.dto';
 import { request } from 'http';
+import { ActivityPaginationFilterDto } from '../dto/activity-pagination-filter.dto';
 
 @UseGuards(AuthGuard, PermissionsGuard)
 @ApiTags('activities')
@@ -25,9 +26,8 @@ export class ActivityController {
 
   @Get()
   @HasPermissions(Permissions.VIEW_ACTIVITIES)
-  async getAllActivities(@Query() filters: PaginationFilter) {
-    const { page, limit, search } = filters;
-    return this._activityService.findAllActivities(page, limit, search);
+  async getAllActivities(@Query() filters: ActivityPaginationFilterDto) {
+    return this._activityService.findAllActivities(filters);
   }
 
   @Post()
