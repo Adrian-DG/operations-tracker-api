@@ -18,7 +18,7 @@ import { PermissionsGuard } from 'src/modules/authentication/guards/Permissions.
 import { ActivityTypeService } from '../services/activity-types.service';
 import { CreateActivityTypeDto } from '../dto/create-activity-type.dto';
 import { PaginationFilter } from 'src/modules/shared/dto/pagination-filter.dto';
-import { UpdateActivityType } from '../dto/update-activity-type.dt';
+import { UpdateActivityType } from '../dto/update-activity-type.dto';
 
 @ApiTags('activity-types')
 @Controller('activity-types')

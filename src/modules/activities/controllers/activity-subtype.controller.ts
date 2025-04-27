@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/modules/authentication/guards/auth.guard';
 import { PermissionsGuard } from 'src/modules/authentication/guards/Permissions.guard';
@@ -29,5 +39,15 @@ export class ActivitySubtypesController {
   @HasPermissions(Permissions.CREATE_ACTIVITY_SUBTYPES)
   async createActivitySubType(@Body() payload: CreateActivitySubTypeDto) {
     return this._activitySubTypeService.create(payload);
+  }
+
+  @Put(':id')
+  @ApiOperation({ summary: 'Update an activity subtype' })
+  @HasPermissions(Permissions.EDIT_ACTIVITY_SUBTYPES)
+  async updateActivitySubType(
+    @Param('id', new ParseIntPipe()) id: number,
+    @Body() payload: CreateActivitySubTypeDto,
+  ) {
+    return this._activitySubTypeService.update(id, payload);
   }
 }
