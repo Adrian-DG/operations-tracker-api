@@ -54,6 +54,7 @@ export class ActivitySubtypesController {
 
   @Public()
   @Get('filter-by-type')
+  @ApiQuery({ name: 'type', required: true, type: Number })
   @ApiOperation({ summary: 'Get activity subtypes by activity type ID' })
   async getActivitySubtypesByActivityTypeId(
     @Query('type', new ParseIntPipe()) type: number,
