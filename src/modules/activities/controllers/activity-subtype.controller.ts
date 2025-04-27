@@ -52,7 +52,6 @@ export class ActivitySubtypesController {
     return await this._activitySubTypeService.update(id, payload);
   }
 
-  @Public()
   @Get('filter-by-type')
   @ApiQuery({ name: 'type', required: true, type: Number })
   @ApiOperation({ summary: 'Get activity subtypes by activity type ID' })
