@@ -15,6 +15,7 @@ import { ActivityDocumentService } from './activity-document.service';
 import { PagedData } from 'src/modules/shared/models/paged-data.model';
 import { ActivityPaginationFilterDto } from '../dto/activity-pagination-filter.dto';
 import { ActivityDetailModel } from '../models/activity-detail.model';
+import { console } from 'inspector';
 
 @Injectable()
 export class ActivityService {
@@ -26,6 +27,8 @@ export class ActivityService {
 
   async createActivity(payload: CreateActivityDto, createdBy: number) {
     const { documents, ...activityPayload } = payload;
+
+    console.log('Activity Payload: ', activityPayload);
 
     return await this._repository.manager.transaction(async (entityManager) => {
       const activity = entityManager.create(Activity, {
@@ -41,7 +44,10 @@ export class ActivityService {
       await entityManager.save(activity);
 
       if (documents.length > 0) {
-        await this._activityDocumentService.saveDocuments(documents, activity);
+        await await this._activityDocumentService.saveDocuments(
+          documents,
+          activity,
+        );
       }
 
       return { ...activity };
